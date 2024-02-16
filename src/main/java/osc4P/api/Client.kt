@@ -1,5 +1,7 @@
 package osc4P.api
 
+import osc4P.UdpClient
+
 interface Client {
 
   companion object {
