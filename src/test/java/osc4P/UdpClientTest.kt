@@ -4,30 +4,28 @@ import io.vertx.core.Vertx
 import io.vertx.core.datagram.DatagramSocketOptions
 import io.vertx.junit5.VertxExtension
 import io.vertx.junit5.VertxTestContext
-import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import osc4P.api.Server
-
+import osc4P.api.Client
 
 @ExtendWith(VertxExtension::class)
-class UdpServerTest {
-
+class UdpClientTest {
   private val port: Int = 9998
   private val host: String = "localhost"
-  private val server: Server = UdpServer()
+  private val client: Client = Client.create(port, host)
 
   @Test
-  fun `should receive an osc message`(vertx: Vertx, test: VertxTestContext) {
+  fun `should send to an udp client`(vertx: Vertx, test: VertxTestContext) {
     val socket = vertx.createDatagramSocket(DatagramSocketOptions())
 
-    server.serve(port, host)
+    socket
       .handler { packet ->
-        assertThat(packet.data().toString()).isEqualTo("a test")
+        Assertions.assertThat(packet.data().toString()).isEqualTo("a test")
         test.completeNow()
       }
       .listen(port, host)
 
-    socket.send("a test", port, host)
+    client.send("a test")
   }
 }
