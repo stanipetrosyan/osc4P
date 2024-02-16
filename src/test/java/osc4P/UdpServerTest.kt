@@ -15,13 +15,13 @@ class UdpServerTest {
 
   private val port: Int = 9998
   private val host: String = "localhost"
-  private val server: Server = UdpServer()
+  private val server: Server = Server.create(port, host)
 
   @Test
   fun `should receive an osc message`(vertx: Vertx, test: VertxTestContext) {
     val socket = vertx.createDatagramSocket(DatagramSocketOptions())
 
-    server.serve(port, host)
+    server.serve()
       .handler { packet ->
         assertThat(packet.data().toString()).isEqualTo("a test")
         test.completeNow()
