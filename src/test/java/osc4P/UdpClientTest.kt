@@ -8,6 +8,7 @@ import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import osc4P.api.Client
+import osc4P.domain.OscMessage
 
 @ExtendWith(VertxExtension::class)
 class UdpClientTest {
@@ -18,6 +19,7 @@ class UdpClientTest {
   @Test
   fun `should send to an udp client`(vertx: Vertx, test: VertxTestContext) {
     val socket = vertx.createDatagramSocket(DatagramSocketOptions())
+    val oscPacket = OscMessage()
 
     socket
       .handler { packet ->
